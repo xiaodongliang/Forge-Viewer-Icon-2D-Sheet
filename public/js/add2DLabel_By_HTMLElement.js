@@ -28,10 +28,7 @@ GeometryCallback.prototype.onLineSegment = function(x1, y1, x2, y2, vpId) {
       pointY2: pt2.y
   }); 
   
-  //add overlay geometry  
-  const height = 0.05;
-  const width = 0.05;
-
+  //add overlay geometry   
   const $viewer = $('#' +viewer.clientContainer.id + ' div.adsk-viewing-viewer');
 
   const $label = $(`
@@ -56,8 +53,7 @@ GeometryCallback.prototype.onCircularArc = function(cx, cy, start, end, radius, 
   var vpXform = this.viewer.model.getPageToModelTransform(vpId);
   //if in CAD coordinate system, applyMatrix4 with vpXform
   var center = new THREE.Vector3().set(cx, cy, 0)//.applyMatrix4(vpXform);
-  return;
-
+ 
   console.log('CircleArc segment: ', {
     centerX: center.x,
     centerY: center.y,
@@ -65,52 +61,20 @@ GeometryCallback.prototype.onCircularArc = function(cx, cy, start, end, radius, 
     startAngle: start,
     endAngle: end
   }); 
-
-  //add overlay geometry
-  var curve = new THREE.EllipseCurve(
-    center.x, center.y,            
-    radius, radius,     
-    start, end,  
-    false            
-  );
-  var path = new THREE.Path(curve.getPoints(50));
-  var geometry = path.createPointsGeometry(50);
-  //remove last vertex if it an arc
-  if(!this.is2PITimes(start,end))
-    geometry.vertices.pop();
-  var circularArc = new THREE.Line(geometry, this.curveMaterial);
-  this.viewer.impl.addOverlay (this.opiedGeometryName, circularArc) 
-  this.viewer.impl.invalidate (false,false,true)  
+ 
 };
 
 GeometryCallback.prototype.onEllipticalArc = function(cx, cy, start, end, major, minor, tilt, vpId) {
   var vpXform = this.viewer.model.getPageToModelTransform(vpId);
   //if in CAD coordinate system, applyMatrix4 with vpXform
   var center = new THREE.Vector3().set(cx, cy, 0)//.applyMatrix4(vpXform);
-  return;
-  console.log('EllipticalArc segment: ', {
+   console.log('EllipticalArc segment: ', {
     centerX: center.x,
     centerY: center.y,
     radius: radius,
     startAngle: start,
     endAngle: end
-  }); 
-
-  //add overlay geometry
-  var curve = new THREE.EllipseCurve(
-    center.x, center.y,            
-    major, minor,     
-    start, end,  
-    false            
-  );
-  var path = new THREE.Path(curve.getPoints(50));
-  var geometry = path.createPointsGeometry(50);
-  //remove last vertex if it an arc
-  if(!this.is2PITimes(start,end))
-    geometry.vertices.pop();
-  var ellipticalArc = new THREE.Line(geometry, this.curveMaterial);
-  this.viewer.impl.addOverlay (this.opiedGeometryName, ellipticalArc) 
-  this.viewer.impl.invalidate (false,false,true)  
+  });  
 };
 GeometryCallback.prototype.onOneTriangle = function(x1, y1, x2, y2, x3, y3, vpId){
   //Similar logic as above

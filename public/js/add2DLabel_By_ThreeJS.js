@@ -40,20 +40,9 @@ GeometryCallback.prototype.onLineSegment = function(x1, y1, x2, y2, vpId) {
       pointY2: pt2.y
   }); 
   
-  //add overlay geometry 
-  
+  //add overlay geometry  
   const height = 0.5;
-  const width = 0.5;
-
-  // var points = [
-  //   new THREE.Vector2(pt1.x-width/2.0,  pt1.y-height/2.0),
-  //   new THREE.Vector2(pt1.x+width/2.0,  pt1.y-height/2.0),
-  //   new THREE.Vector2(pt1.x+width/2.0,  pt1.y+height/2.0),
-  //   new THREE.Vector2(pt1.x-width/2.0,  pt1.y+height/2.0)
-  // ];
-  // var shape = new THREE.Shape(points);
-  // shape.autoClose = true; // the shape will be closed automatically, thus we don't need to put the fifth point
-  // var geometry = shape.createPointsGeometry();
+  const width = 0.5; 
 
   var geometry = new THREE.Geometry () 
 
@@ -69,6 +58,7 @@ GeometryCallback.prototype.onLineSegment = function(x1, y1, x2, y2, vpId) {
  
   this.viewer.impl.addOverlay (this.opiedGeometryName, lines) 
 
+  //text
   const params = {
       bevelEnabled: true,
       curveSegments: 24,
@@ -83,23 +73,19 @@ GeometryCallback.prototype.onLineSegment = function(x1, y1, x2, y2, vpId) {
   Object.assign({}, {
     font: new Three.Font(font_json),
     params
-  }))
- 
-  
- 
+  })) 
 
-var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000 , lineWidth: 0.01} );
+  var textMaterial = new THREE.MeshPhongMaterial( { color: 0xff0000 , lineWidth: 0.01} );
 
- var mesh = new THREE.Mesh( textGeo, textMaterial );
- mesh.position.x = pt1.x;
- mesh.position.y = pt1.y;
- mesh.scale.x = 0.001;
- mesh.scale.y = 0.001 
-
+  var mesh = new THREE.Mesh( textGeo, textMaterial );
+  mesh.position.x = pt1.x;
+  mesh.position.y = pt1.y;
+  mesh.scale.x = 0.001;
+  mesh.scale.y = 0.001  
   
   this.viewer.impl.addOverlay (this.opiedGeometryName, mesh) 
 
-  
+  //refresh screen
   this.viewer.impl.invalidate (false,false,true)   
 }
 
@@ -108,7 +94,6 @@ GeometryCallback.prototype.onCircularArc = function(cx, cy, start, end, radius, 
   var vpXform = this.viewer.model.getPageToModelTransform(vpId);
   //if in CAD coordinate system, applyMatrix4 with vpXform
   var center = new THREE.Vector3().set(cx, cy, 0)//.applyMatrix4(vpXform);
-  return;
 
   console.log('CircleArc segment: ', {
     centerX: center.x,
@@ -116,53 +101,20 @@ GeometryCallback.prototype.onCircularArc = function(cx, cy, start, end, radius, 
     radius: radius,
     startAngle: start,
     endAngle: end
-  }); 
-
-  //add overlay geometry
-  var curve = new THREE.EllipseCurve(
-    center.x, center.y,            
-    radius, radius,     
-    start, end,  
-    false            
-  );
-  var path = new THREE.Path(curve.getPoints(50));
-  var geometry = path.createPointsGeometry(50);
-  //remove last vertex if it an arc
-  if(!this.is2PITimes(start,end))
-    geometry.vertices.pop();
-  var circularArc = new THREE.Line(geometry, this.curveMaterial);
-  this.viewer.impl.addOverlay (this.opiedGeometryName, circularArc) 
-  this.viewer.impl.invalidate (false,false,true)  
+  });  
 };
 
 GeometryCallback.prototype.onEllipticalArc = function(cx, cy, start, end, major, minor, tilt, vpId) {
   var vpXform = this.viewer.model.getPageToModelTransform(vpId);
   //if in CAD coordinate system, applyMatrix4 with vpXform
   var center = new THREE.Vector3().set(cx, cy, 0)//.applyMatrix4(vpXform);
-  return;
   console.log('EllipticalArc segment: ', {
     centerX: center.x,
     centerY: center.y,
     radius: radius,
     startAngle: start,
     endAngle: end
-  }); 
-
-  //add overlay geometry
-  var curve = new THREE.EllipseCurve(
-    center.x, center.y,            
-    major, minor,     
-    start, end,  
-    false            
-  );
-  var path = new THREE.Path(curve.getPoints(50));
-  var geometry = path.createPointsGeometry(50);
-  //remove last vertex if it an arc
-  if(!this.is2PITimes(start,end))
-    geometry.vertices.pop();
-  var ellipticalArc = new THREE.Line(geometry, this.curveMaterial);
-  this.viewer.impl.addOverlay (this.opiedGeometryName, ellipticalArc) 
-  this.viewer.impl.invalidate (false,false,true)  
+  });   
 };
 GeometryCallback.prototype.onOneTriangle = function(x1, y1, x2, y2, x3, y3, vpId){
   //Similar logic as above
