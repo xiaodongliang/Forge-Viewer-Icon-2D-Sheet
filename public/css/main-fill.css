@@ -1,0 +1,23 @@
+﻿html, body{
+  min-height: 100%;
+  height: 100%;
+}
+
+.fill{
+  height: calc(100vh);
+}
+
+body {
+  padding-top: 0px; /* space for the top nav bar */
+  margin-right: 0px;
+}
+
+#appBuckets {
+  overflow: auto;
+  width: 100%;
+  height: calc(100vh);
+}
+
+#forgeViewer {
+  width: 100%;
+}
